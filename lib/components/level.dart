@@ -21,7 +21,7 @@ class Level extends World {
     final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
 
     if (spawnPointLayer != null) {
-      for (final spawnpoint in spawnPointLayer!.objects) {
+      for (final spawnpoint in spawnPointLayer.objects) {
         switch (spawnpoint.class_) {
           case 'Player':
             player.position = Vector2(spawnpoint.x, spawnpoint.y);
