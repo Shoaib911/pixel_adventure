@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="68">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="70">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -32,7 +32,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Spawnpoints">
-  <object id="17" name="Playrer" type="Player" x="305" y="271.333" width="30" height="31"/>
+  <object id="17" name="Playrer" type="Player" x="128" y="241.333" width="30" height="31"/>
   <object id="56" name="Bananas" type="Fruit" x="60" y="75" width="30" height="32"/>
   <object id="57" name="Apple" type="Fruit" x="60" y="168.5" width="30" height="32"/>
   <object id="58" name="Cherries" type="Fruit" x="225" y="140.5" width="30" height="32"/>
@@ -43,6 +43,20 @@
   <object id="63" name="Cherries" type="Fruit" x="344" y="134" width="30" height="32"/>
   <object id="64" name="Kiwi" type="Fruit" x="482" y="90.5" width="30" height="32"/>
   <object id="65" name="Kiwi" type="Fruit" x="480" y="187.5" width="30" height="32"/>
+  <object id="68" type="Saw" x="304" y="304" width="32" height="32">
+   <properties>
+    <property name="isVertical" type="bool" value="false"/>
+    <property name="offNeg" type="float" value="8"/>
+    <property name="offPos" type="float" value="7"/>
+   </properties>
+  </object>
+  <object id="69" type="Saw" x="276" y="143" width="32" height="32">
+   <properties>
+    <property name="isVertical" type="bool" value="true"/>
+    <property name="offNeg" type="float" value="4"/>
+    <property name="offPos" type="float" value="3"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="3" name="Collisions">
   <object id="28" x="32" y="48" width="16" height="288"/>
