@@ -44,25 +44,56 @@ class Player extends SpriteAnimationGroupComponent
   );
 
   @override
+  // FutureOr<void> onLoad() {
+  //   _loadAllAnimations();
+  //   startingPosition = Vector2(position.x, position.y);
+  //   //debugMode = true;
+  //   add(RectangleHitbox(
+  //     position: Vector2(hitbox.offsetX, hitbox.offsetY),
+  //     size: Vector2(hitbox.width, hitbox.height),
+  //   ));
+  //   return super.onLoad();
+  // }
+  @override
   FutureOr<void> onLoad() {
-    _loadAllAnimations();
-    startingPosition = Vector2(position.x, position.y);
-    //debugMode = true;
-    add(RectangleHitbox(
-      position: Vector2(hitbox.offsetX, hitbox.offsetY),
-      size: Vector2(hitbox.width, hitbox.height),
-    ));
+    try {
+      _loadAllAnimations();
+      startingPosition = Vector2(position.x, position.y);
+      //debugMode = true;
+      add(RectangleHitbox(
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height),
+      ));
+    } catch (e, stackTrace) {
+      print('Error during player setup: $e');
+      print(stackTrace);
+    }
     return super.onLoad();
   }
 
   @override
+  // void update(double dt) {
+  //   if (!gotHit) {
+  //     _updatePlayerState();
+  //     _updatePlayerMovement(dt);
+  //     _checkHorizontalCollisions();
+  //     _applyGravity(dt);
+  //     _checkVerticalCollisions();
+  //   }
+  //   super.update(dt);
+  // }
   void update(double dt) {
-    if (!gotHit) {
-      _updatePlayerState();
-      _updatePlayerMovement(dt);
-      _checkHorizontalCollisions();
-      _applyGravity(dt);
-      _checkVerticalCollisions();
+    try {
+      if (!gotHit) {
+        _updatePlayerState();
+        _updatePlayerMovement(dt);
+        _checkHorizontalCollisions();
+        _applyGravity(dt);
+        _checkVerticalCollisions();
+      }
+    } catch (e, stackTrace) {
+      print('Error during player update: $e');
+      print(stackTrace);
     }
     super.update(dt);
   }
@@ -84,9 +115,19 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   @override
+  // void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  //   if (other is Fruit) other.collidingWithPlayer();
+  //   if (other is Saw) _respawn();
+  //   super.onCollision(intersectionPoints, other);
+  // }
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Fruit) other.collidingWithPlayer();
-    if (other is Saw) _respawn();
+    try {
+      if (other is Fruit) other.collidingWithPlayer();
+      if (other is Saw) _respawn();
+    } catch (e, stackTrace) {
+      print('Error handling collision: $e');
+      print(stackTrace);
+    }
     super.onCollision(intersectionPoints, other);
   }
 
