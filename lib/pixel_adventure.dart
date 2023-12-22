@@ -92,7 +92,7 @@ class PixelAdventure extends FlameGame
   late final CameraComponent cam;
   Player player = Player(character: 'Mask Dude');
   late JoystickComponent joystick;
-  bool showJoystick = false;
+  bool showJoystick = true;
 
   @override
   FutureOr<void> onLoad() async {
@@ -148,6 +148,7 @@ class PixelAdventure extends FlameGame
     } catch (e, stackTrace) {
       // Handle the exception (log, show error message, etc.)
       print('Error adding joystick: $e');
+      showJoystick = false;
       print(stackTrace);
     }
   }
