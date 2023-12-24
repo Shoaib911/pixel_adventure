@@ -142,7 +142,6 @@ class Player extends SpriteAnimationGroupComponent
         amount: amount,
         stepTime: stepTime,
         textureSize: Vector2.all(96),
-        loop: false,
       ),
     );
   }
@@ -154,6 +153,7 @@ class Player extends SpriteAnimationGroupComponent
         amount: amount,
         stepTime: stepTime,
         textureSize: Vector2.all(96),
+        loop: false,
       ),
     );
   }

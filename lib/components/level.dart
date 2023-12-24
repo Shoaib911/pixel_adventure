@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:pixel_adventure/components/background_tile.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
@@ -78,7 +77,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
     if (backgroundLayer != null) {
       final backgroundColor =
-          backgroundLayer.properties.getValue('BackgroundCoor');
+          backgroundLayer.properties.getValue('BackgroundColor');
       final backgroundTile = BackgroundTile(
         color: backgroundColor ?? 'Gray',
         position: Vector2(0, 0),

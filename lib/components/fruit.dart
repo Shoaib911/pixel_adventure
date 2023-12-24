@@ -51,7 +51,6 @@ class Fruit extends SpriteAnimationComponent
         loop: false,
       ),
     );
-
     await animationTicker?.completed;
     removeFromParent();
   }

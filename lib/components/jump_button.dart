@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
 
 class JumpButton extends SpriteComponent

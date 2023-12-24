@@ -58,7 +58,7 @@ class Checkpoint extends SpriteAnimationComponent
         game.images.fromCache(
             'Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)(64x64).png'),
         SpriteAnimationData.sequenced(
-          amount: 26,
+          amount: 10,
           stepTime: 0.05,
           textureSize: Vector2.all(64),
         ));
