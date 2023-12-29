@@ -17,6 +17,7 @@ class Fruit extends SpriteAnimationComponent
           position: position,
           size: size,
         );
+
   final double stepTime = 0.05;
   final hitbox = CustomHitbox(
     offsetX: 10,
@@ -28,25 +29,31 @@ class Fruit extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
+    // debugMode = true;
     priority = -1;
 
-    add(RectangleHitbox(
-      position: Vector2(hitbox.offsetX, hitbox.offsetY),
-      size: Vector2(hitbox.width, hitbox.height),
-      // collisionType: CollissionType.passive,
-    ));
+    add(
+      RectangleHitbox(
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height),
+        collisionType: CollisionType.passive,
+      ),
+    );
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('Items/Fruits/$fruit.png'),
       SpriteAnimationData.sequenced(
-          amount: 17, stepTime: stepTime, textureSize: Vector2.all(32)),
+        amount: 17,
+        stepTime: stepTime,
+        textureSize: Vector2.all(32),
+      ),
     );
     return super.onLoad();
   }
 
-  void collidingWithPlayer() async {
+  void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
-      if (game.playSound) {
+      if (game.playSounds) {
         FlameAudio.play('collect_fruit.wav', volume: game.soundVolume);
       }
       animation = SpriteAnimation.fromFrameData(
@@ -58,9 +65,9 @@ class Fruit extends SpriteAnimationComponent
           loop: false,
         ),
       );
-    }
 
-    await animationTicker?.completed;
-    removeFromParent();
+      await animationTicker?.completed;
+      removeFromParent();
+    }
   }
 }

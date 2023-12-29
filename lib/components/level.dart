@@ -3,12 +3,12 @@ import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:pixel_adventure/components/background_tile.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
+import 'package:pixel_adventure/components/chicken.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
+import 'package:pixel_adventure/components/fruit.dart';
 import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
-
-import 'fruit.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {
   final String levelName;
@@ -22,54 +22,12 @@ class Level extends World with HasGameRef<PixelAdventure> {
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
 
     add(level);
+
     _scrollingBackground();
     _spawningObjects();
-    _addCollision();
+    _addCollisions();
 
     return super.onLoad();
-  }
-
-  void _spawningObjects() {
-    final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
-
-    if (spawnPointLayer != null) {
-      for (final spawnpoint in spawnPointLayer.objects) {
-        switch (spawnpoint.class_) {
-          case 'Player':
-            player.position = Vector2(spawnpoint.x, spawnpoint.y);
-            player.scale.x = 1;
-            add(player);
-            break;
-          case 'Fruit':
-            final fruit = Fruit(
-                fruit: spawnpoint.name,
-                position: Vector2(spawnpoint.x, spawnpoint.y),
-                size: Vector2(spawnpoint.width, spawnpoint.height));
-            add(fruit);
-            break;
-          case 'Saw':
-            final isVertical = spawnpoint.properties.getValue('isVertical');
-            final offNeg = spawnpoint.properties.getValue('offNeg');
-            final offPos = spawnpoint.properties.getValue('offPos');
-            final saw = Saw(
-                isVertical: isVertical,
-                offNeg: offNeg,
-                offPos: offPos,
-                position: Vector2(spawnpoint.x, spawnpoint.y),
-                size: Vector2(spawnpoint.width, spawnpoint.height));
-            add(saw);
-            break;
-          case 'Checkpoint':
-            final checkpoint = Checkpoint(
-              position: Vector2(spawnpoint.x, spawnpoint.y),
-              size: Vector2(spawnpoint.width, spawnpoint.height),
-            );
-            add(checkpoint);
-            break;
-          default:
-        }
-      }
-    }
   }
 
   void _scrollingBackground() {
@@ -86,11 +44,67 @@ class Level extends World with HasGameRef<PixelAdventure> {
     }
   }
 
-  void _addCollision() {
-    final collisionLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
+  void _spawningObjects() {
+    final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
 
-    if (collisionLayer != null) {
-      for (final collision in collisionLayer.objects) {
+    if (spawnPointsLayer != null) {
+      for (final spawnPoint in spawnPointsLayer.objects) {
+        switch (spawnPoint.class_) {
+          case 'Player':
+            player.position = Vector2(spawnPoint.x, spawnPoint.y);
+            player.scale.x = 1;
+            add(player);
+            break;
+          case 'Fruit':
+            final fruit = Fruit(
+              fruit: spawnPoint.name,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(fruit);
+            break;
+          case 'Saw':
+            final isVertical = spawnPoint.properties.getValue('isVertical');
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+            final saw = Saw(
+              isVertical: isVertical,
+              offNeg: offNeg,
+              offPos: offPos,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(saw);
+            break;
+          case 'Checkpoint':
+            final checkpoint = Checkpoint(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(checkpoint);
+            break;
+          case 'Chicken':
+            final offNeg = spawnPoint.properties.getValue('offNeg') ?? 0.0;
+            final offPos = spawnPoint.properties.getValue('offPos') ?? 0.0;
+            final chicken = Chicken(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: offNeg,
+              offPos: offPos,
+            );
+            add(chicken);
+            break;
+          default:
+        }
+      }
+    }
+  }
+
+  void _addCollisions() {
+    final collisionsLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
+
+    if (collisionsLayer != null) {
+      for (final collision in collisionsLayer.objects) {
         switch (collision.class_) {
           case 'Platform':
             final platform = CollisionBlock(

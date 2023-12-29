@@ -15,16 +15,16 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 229.5,
-                "y": 106
+                "x": 478.5,
+                "y": 296
             }
         },
         "Level-02.tmx": {
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 362,
-                "y": 102.66666666666669
+                "x": 320,
+                "y": 184.66666666666669
             }
         },
         "Pixel Adventure.tsx": {
@@ -46,9 +46,9 @@
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "Level-01.tmx",
         "Pixel Adventure.tsx",
-        "Level-02.tmx"
+        "Level-02.tmx",
+        "Level-01.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

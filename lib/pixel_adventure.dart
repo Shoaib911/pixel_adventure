@@ -1,11 +1,13 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/painting.dart';
+import 'package:pixel_adventure/components/jump_button.dart';
+import 'package:pixel_adventure/components/player.dart';
 import 'package:pixel_adventure/components/level.dart';
-import 'components/jump_button.dart';
-import 'components/player.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -15,25 +17,27 @@ class PixelAdventure extends FlameGame
         TapCallbacks {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
-
   late CameraComponent cam;
   Player player = Player(character: 'Mask Dude');
   late JoystickComponent joystick;
   bool showControls = false;
-  bool playSound = true;
+  bool playSounds = true;
   double soundVolume = 1.0;
   List<String> levelNames = ['Level-01', 'Level-01'];
   int currentLevelIndex = 0;
+
   @override
   FutureOr<void> onLoad() async {
-    // Load All Images into Cache
+    // Load all images into cache
     await images.loadAllImages();
 
     _loadLevel();
+
     if (showControls) {
       addJoystick();
       add(JumpButton());
     }
+
     return super.onLoad();
   }
 
@@ -49,13 +53,15 @@ class PixelAdventure extends FlameGame
     joystick = JoystickComponent(
       priority: 10,
       knob: SpriteComponent(
-          sprite: Sprite(
-        images.fromCache('HUD/Knob.png'),
-      )),
+        sprite: Sprite(
+          images.fromCache('HUD/Knob.png'),
+        ),
+      ),
       background: SpriteComponent(
-          sprite: Sprite(
-        images.fromCache('HUD/Joystick.png'),
-      )),
+        sprite: Sprite(
+          images.fromCache('HUD/Joystick.png'),
+        ),
+      ),
       margin: const EdgeInsets.only(left: 32, bottom: 32),
     );
 
@@ -82,11 +88,12 @@ class PixelAdventure extends FlameGame
 
   void loadNextLevel() {
     removeWhere((component) => component is Level);
+
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;
       _loadLevel();
     } else {
-      //no more levels
+      // no more levels
       currentLevelIndex = 0;
       _loadLevel();
     }

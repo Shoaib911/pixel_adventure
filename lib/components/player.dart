@@ -1,16 +1,17 @@
 import 'dart:async';
+
 import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flame/components.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
+import 'package:pixel_adventure/components/chicken.dart';
 import 'package:pixel_adventure/components/collision_block.dart';
 import 'package:pixel_adventure/components/custom_hitbox.dart';
 import 'package:pixel_adventure/components/fruit.dart';
+import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/components/utils.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
-
-import 'saw.dart';
 
 enum PlayerState {
   idle,
@@ -25,7 +26,10 @@ enum PlayerState {
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   String character;
-  Player({position, this.character = 'Ninja Frog'}) : super(position: position);
+  Player({
+    position,
+    this.character = 'Ninja Frog',
+  }) : super(position: position);
 
   final double stepTime = 0.05;
   late final SpriteAnimation idleAnimation;
@@ -54,13 +58,14 @@ class Player extends SpriteAnimationGroupComponent
     width: 14,
     height: 28,
   );
-
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
 
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
+    // debugMode = true;
+
     startingPosition = Vector2(position.x, position.y);
 
     add(RectangleHitbox(
@@ -73,6 +78,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   void update(double dt) {
     accumulatedTime += dt;
+
     while (accumulatedTime >= fixedDeltaTime) {
       if (!gotHit && !reachedCheckpoint) {
         _updatePlayerState();
@@ -81,6 +87,7 @@ class Player extends SpriteAnimationGroupComponent
         _applyGravity(fixedDeltaTime);
         _checkVerticalCollisions();
       }
+
       accumulatedTime -= fixedDeltaTime;
     }
 
@@ -107,9 +114,10 @@ class Player extends SpriteAnimationGroupComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint) {
-      if (other is Fruit) other.collidingWithPlayer();
+      if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
-      if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
+      if (other is Chicken) other.collidedWithPlayer();
+      if (other is Checkpoint) _reachedCheckpoint();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -123,6 +131,7 @@ class Player extends SpriteAnimationGroupComponent
     appearingAnimation = _specialSpriteAnimation('Appearing', 7);
     disappearingAnimation = _specialSpriteAnimation('Desappearing', 7);
 
+    // List of all animations
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
@@ -133,6 +142,7 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.disappearing: disappearingAnimation,
     };
 
+    // Set current animation
     current = PlayerState.idle;
   }
 
@@ -142,7 +152,7 @@ class Player extends SpriteAnimationGroupComponent
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
-        textureSize: Vector2.all(96),
+        textureSize: Vector2.all(32),
       ),
     );
   }
@@ -161,16 +171,21 @@ class Player extends SpriteAnimationGroupComponent
 
   void _updatePlayerState() {
     PlayerState playerState = PlayerState.idle;
+
     if (velocity.x < 0 && scale.x > 0) {
       flipHorizontallyAroundCenter();
     } else if (velocity.x > 0 && scale.x < 0) {
       flipHorizontallyAroundCenter();
     }
+
+    // Check if moving, set running
     if (velocity.x > 0 || velocity.x < 0) playerState = PlayerState.running;
 
-    if (velocity.y > _gravity) playerState = PlayerState.falling;
+    // check if Falling set to falling
+    if (velocity.y > 0) playerState = PlayerState.falling;
 
-    if (velocity.y < _gravity) playerState = PlayerState.jumping;
+    // Checks if jumping, set to jumping
+    if (velocity.y < 0) playerState = PlayerState.jumping;
 
     current = playerState;
   }
@@ -178,14 +193,14 @@ class Player extends SpriteAnimationGroupComponent
   void _updatePlayerMovement(double dt) {
     if (hasJumped && isOnGround) _playerJump(dt);
 
-    //if (velocity.y > _gravity) isOnGround = false;
+    // if (velocity.y > _gravity) isOnGround = false; // optional
 
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
 
   void _playerJump(double dt) {
-    if (game.playSound) FlameAudio.play('jump.wav', volume: game.soundVolume);
+    if (game.playSounds) FlameAudio.play('jump.wav', volume: game.soundVolume);
     velocity.y = -_jumpForce;
     position.y += velocity.y * dt;
     isOnGround = false;
@@ -246,7 +261,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
-    if (game.playSound) FlameAudio.play('hit.wav', volume: game.soundVolume);
+    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
     const canMoveDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -269,7 +284,7 @@ class Player extends SpriteAnimationGroupComponent
 
   void _reachedCheckpoint() async {
     reachedCheckpoint = true;
-    if (game.playSound) {
+    if (game.playSounds) {
       FlameAudio.play('disappear.wav', volume: game.soundVolume);
     }
     if (scale.x > 0) {
@@ -277,6 +292,7 @@ class Player extends SpriteAnimationGroupComponent
     } else if (scale.x < 0) {
       position = position + Vector2(32, -32);
     }
+
     current = PlayerState.disappearing;
 
     await animationTicker?.completed;
@@ -287,5 +303,9 @@ class Player extends SpriteAnimationGroupComponent
 
     const waitToChangeDuration = Duration(seconds: 3);
     Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
+  }
+
+  void collidedwithEnemy() {
+    _respawn();
   }
 }
