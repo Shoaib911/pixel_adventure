@@ -1,5 +1,3 @@
-import 'package:flame/collisions.dart';
-
 bool checkCollision(player, block) {
   final hitbox = player.hitbox;
   final playerX = player.position.x + hitbox.offsetX;
