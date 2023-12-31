@@ -1,7 +1,10 @@
+// ignore_for_file: unused_import
+
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pixel_adventure/home.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
 
 void main() async {
@@ -9,8 +12,11 @@ void main() async {
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
-  PixelAdventure game = PixelAdventure();
-  runApp(
-    GameWidget(game: kDebugMode ? PixelAdventure() : game),
-  );
+  // PixelAdventure game = PixelAdventure();
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Home(),
+  )
+      // GameWidget(game: kDebugMode ? PixelAdventure() : game),
+      );
 }
