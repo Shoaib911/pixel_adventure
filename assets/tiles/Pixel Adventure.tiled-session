@@ -3,28 +3,75 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Level-01.tmx",
+    "activeFile": "Level-02.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
+        "C:/Users/Administrator/Desktop/Shoaib/VP/pixel_adventure-master/assets/tiles/Level-02.tmx": {
+            "scale": 1.141484375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.1971117651085,
+                "y": 184.84703305728559
+            }
+        },
+        "C:/Users/Administrator/Desktop/Shoaib/VP/pixel_adventure-master/assets/tiles/Pixel Adventure.tsx": {
+            "scaleInDock": 1
+        },
         "Level-01.tmx": {
             "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 331.5,
+                "y": 205
+            }
+        },
+        "Level-02.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 337.5,
+                "y": 187
+            }
+        },
+        "Level-03.tmx": {
+            "expandedObjectLayers": [
+                3,
                 2
             ],
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 478.5,
-                "y": 296
+                "x": 322.5,
+                "y": 188
             }
         },
-        "Level-02.tmx": {
-            "scale": 0.75,
+        "Level-04.tmx": {
+            "scale": 1.046484375,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320,
-                "y": 184.66666666666669
+                "x": 320.5972377752893,
+                "y": 184.42702500933189
+            }
+        },
+        "Level-05.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.046484375,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 320.5972377752893,
+                "y": 184.42702500933189
             }
         },
         "Pixel Adventure.tsx": {
@@ -39,16 +86,16 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "Pixel Adventure.tsx",
         "Level-01.tmx",
         "Level-02.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "float",
+    "property.type": "bool",
     "recentFiles": [
-        "Pixel Adventure.tsx",
+        "Level-01.tmx",
         "Level-02.tmx",
-        "Level-01.tmx"
+        "Pixel Adventure.tsx",
+        "C:/Users/Administrator/Desktop/Shoaib/VP/pixel_adventure-master/assets/tiles/Level-02.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
