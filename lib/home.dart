@@ -10,9 +10,9 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-PixelAdventure game = PixelAdventure();
-
 class _HomeState extends State<Home> {
+  PixelAdventure game = PixelAdventure();
+
   bool isHovered = false;
 
   @override

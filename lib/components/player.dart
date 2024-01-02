@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pixel_adventure/components/checkpoint.dart';
 import 'package:pixel_adventure/components/chicken.dart';
@@ -11,7 +13,10 @@ import 'package:pixel_adventure/components/custom_hitbox.dart';
 import 'package:pixel_adventure/components/fruit.dart';
 import 'package:pixel_adventure/components/saw.dart';
 import 'package:pixel_adventure/components/utils.dart';
+import 'package:pixel_adventure/home.dart';
 import 'package:pixel_adventure/pixel_adventure.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 enum PlayerState {
   idle,
@@ -60,6 +65,7 @@ class Player extends SpriteAnimationGroupComponent
   );
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
+  int life = 3;
 
   @override
   FutureOr<void> onLoad() {
@@ -261,25 +267,36 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
-    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
-    const canMoveDuration = Duration(milliseconds: 400);
-    gotHit = true;
-    current = PlayerState.hit;
+    life = life - 1;
+    if (life > 0) {
+      if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
+      const canMoveDuration = Duration(milliseconds: 400);
+      gotHit = true;
+      current = PlayerState.hit;
 
-    await animationTicker?.completed;
-    animationTicker?.reset();
+      await animationTicker?.completed;
+      animationTicker?.reset();
 
-    scale.x = 1;
-    position = startingPosition - Vector2.all(32);
-    current = PlayerState.appearing;
+      scale.x = 1;
+      position = startingPosition - Vector2.all(32);
+      current = PlayerState.appearing;
 
-    await animationTicker?.completed;
-    animationTicker?.reset();
+      await animationTicker?.completed;
+      animationTicker?.reset();
 
-    velocity = Vector2.zero();
-    position = startingPosition;
-    _updatePlayerState();
-    Future.delayed(canMoveDuration, () => gotHit = false);
+      velocity = Vector2.zero();
+      position = startingPosition;
+      _updatePlayerState();
+      Future.delayed(canMoveDuration, () => gotHit = false);
+    } else {
+      life = 3;
+      try {
+        navigatorKey.currentState!.pushReplacement(
+            MaterialPageRoute(builder: (context) => const Home()));
+      } catch (e) {
+        log(e.toString());
+      }
+    }
   }
 
   void _reachedCheckpoint() async {
